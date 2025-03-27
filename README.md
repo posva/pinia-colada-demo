@@ -1,5 +1,7 @@
 # Pinia Colada mini workshop
 
+Fabriq 2025-03-27
+
 ## Project Setup
 
 ```sh
@@ -29,10 +31,14 @@ pnpm dev
   - Ensure keys are hierarchical (contacts -> search | contacts -> id)
 - Update the contact update contact to also invalidate the search results
 - Extra
-  - Debounce the search
+  - Debounce the search (VueUse `refDebounced`)
+  - Handle errors when fetching the contacts, add a retry button (change the `api/contacts.ts` to add errors)
+  - Extract optimistic updates into functions that can be reused
 
 ## Resources
 
 - [Pinia Colada](https://pinia-colada.esm.dev/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [Water.css](https://watercss.kognise.dev/)
+- [VueUse](https://vueuse.org/)
+- [Routes](https://uvr.esm.is/) (if you want to add new pages)
