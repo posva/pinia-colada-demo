@@ -1,5 +1,6 @@
 import { mande } from 'mande'
 import type { Options } from 'mande'
+import { delay } from './utils'
 
 export const contacts = mande('http://localhost:7777/contacts', {})
 
@@ -33,6 +34,8 @@ export async function getAllContacts(options?: Options<'json'>) {
  * @param id id of the contact
  */
 export async function getContactById(id: string | number, options?: Options<'json'>) {
+  // for testing
+  // await delay(700)
   return contacts.get<Contact>(id, options)
 }
 
@@ -65,6 +68,10 @@ export function updateContact(
   contact: Partial<ContactInfo> & { id: number },
   options?: Options<'json'>,
 ): Promise<Contact> {
+  // to simulate server errros
+  // if (Math.random() > 0.75) {
+  //   throw new Error('On no!')
+  // }
   return contacts.patch<Contact, 'json'>(`/${contact.id}`, contact, options)
 }
 

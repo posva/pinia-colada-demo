@@ -3,7 +3,7 @@ import { useRoute } from 'vue-router/auto'
 import ContactCard from '@/components/ContactCard.vue'
 import { updateContact as _updateContact, getContactById } from '@/api/contacts'
 import type { Contact } from '@/api/contacts'
-import { shallowRef } from 'vue'
+import { shallowRef, watch } from 'vue'
 
 const route = useRoute('/contacts/[id]')
 
@@ -11,7 +11,14 @@ function updateContact(contact: Partial<Contact> & { id: number }) {
   return _updateContact({ ...contact, id: contact.id })
 }
 
-const contact = shallowRef(await getContactById(route.params.id))
+const contact = shallowRef<Contact>()
+watch(
+  () => route.params.id,
+  async (id) => {
+    contact.value = await getContactById(id)
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
@@ -22,5 +29,6 @@ const contact = shallowRef(await getContactById(route.params.id))
       :contact="contact"
       @update:contact="updateContact"
     />
+    <div v-else>Loading...</div>
   </section>
 </template>

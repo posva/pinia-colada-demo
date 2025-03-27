@@ -13,12 +13,6 @@ watch(
   },
   { immediate: true },
 )
-
-const error = shallowRef<Error | null>(null)
-onErrorCaptured((err) => {
-  console.error('💥 Captured nested error in /suspense/contacts/', err)
-  error.value = err
-})
 </script>
 
 <template>
@@ -55,15 +49,7 @@ onErrorCaptured((err) => {
         </ul>
       </div>
 
-      <RouterView v-slot="{ Component }">
-        <Suspense suspensible @resolve="error = null">
-          <component :is="Component" :key="$route.path" />
-
-          <template #fallback>
-            <p>Loading (nested)...</p>
-          </template>
-        </Suspense>
-      </RouterView>
+      <RouterView />
     </div>
   </main>
 </template>
