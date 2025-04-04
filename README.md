@@ -14,6 +14,14 @@ pnpm install
 pnpm dev
 ```
 
+Or without pnpm:
+
+```sh
+npm i
+npm run dev:db
+npm run dev:client
+```
+
 ## Exercises
 
 - Add Pinia Colada Vue Plugin
