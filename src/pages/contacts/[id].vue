@@ -1,24 +1,26 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router/auto'
 import ContactCard from '@/components/ContactCard.vue'
-import { updateContact as _updateContact, getContactById } from '@/api/contacts'
-import type { Contact } from '@/api/contacts'
-import { shallowRef, watch } from 'vue'
+import { updateContact as _updateContact, getContactById, patchContact } from '@/api/contacts'
+import { useMutation, useQuery, useQueryCache } from '@pinia/colada'
+import { CONTACTS_QUERY_KEYS } from '@/queries/contacts'
 
 const route = useRoute('/contacts/[id]')
+const queryCache = useQueryCache()
 
-function updateContact(contact: Partial<Contact> & { id: number }) {
-  return _updateContact({ ...contact, id: contact.id })
-}
+const { mutate: updateContact, error } = useMutation({
+  mutation: patchContact,
 
-const contact = shallowRef<Contact>()
-watch(
-  () => route.params.id,
-  async (id) => {
-    contact.value = await getContactById(id)
+  onSettled(data, error, vars) {
+    queryCache.invalidateQueries({ key: CONTACTS_QUERY_KEYS.byId(String(vars.id)) })
+    queryCache.invalidateQueries({ key: CONTACTS_QUERY_KEYS.search() })
   },
-  { immediate: true },
-)
+})
+
+const { data: contact } = useQuery({
+  key: () => CONTACTS_QUERY_KEYS.byId(route.params.id),
+  query: () => getContactById(route.params.id),
+})
 </script>
 
 <template>

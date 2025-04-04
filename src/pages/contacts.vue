@@ -1,18 +1,16 @@
 <script lang="ts" setup>
 import { searchContacts } from '@/api/contacts'
+import { CONTACTS_QUERY_KEYS } from '@/queries/contacts'
+import { useQuery } from '@pinia/colada'
 import { useRouteQuery } from '@vueuse/router'
 import { onErrorCaptured, shallowRef, watch } from 'vue'
 
 const searchText = useRouteQuery('search', '', { mode: 'push' })
 
-const searchResult = shallowRef<Awaited<ReturnType<typeof searchContacts>>>()
-watch(
-  searchText,
-  async () => {
-    searchResult.value = await searchContacts(searchText.value)
-  },
-  { immediate: true },
-)
+const { data: searchResult } = useQuery({
+  key: () => CONTACTS_QUERY_KEYS.searchWithText(searchText.value),
+  query: () => searchContacts(searchText.value),
+})
 </script>
 
 <template>
