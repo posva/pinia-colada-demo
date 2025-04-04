@@ -120,3 +120,5 @@ export function searchContacts(
     results: (await res.json()) as Contact[],
   }))
 }
+
+export type ContactSearchResults = Awaited<ReturnType<typeof searchContacts>>
