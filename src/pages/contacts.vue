@@ -51,6 +51,7 @@ const { data: searchResult, isLoading } = useQuery({
                 :to="{
                   name: '/contacts/[id]',
                   params: { id: contact.id },
+                  query: { ...$route.query },
                 }"
               >
                 <img
